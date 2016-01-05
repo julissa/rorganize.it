@@ -27,7 +27,7 @@ class PostsController < ApplicationController
     @post.draft = post_params_draft
     @post.person = current_person
 
-    @post.set_published_on! if !@post.draft
+    @post.set_published_at! if !@post.draft
 
     if @post.save
       redirect_to @post, notice: post_created_notice
@@ -40,7 +40,7 @@ class PostsController < ApplicationController
     @post.draft = post_params_draft
 
     if !@post.draft && @post.draft_changed?
-      @post.set_published_on!
+      @post.set_published_at!
     end
 
     if @post.update(post_params)
