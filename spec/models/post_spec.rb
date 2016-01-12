@@ -21,14 +21,14 @@ describe Post do
   # this is an example for how to test scopes using sql. See convo here: https://github.com/rubycorns/rorganize.it/pull/341
   describe 'scopes' do
     specify do
-      expect(Post.published.to_sql).to eq "SELECT \"posts\".* FROM \"posts\"  WHERE \"posts\".\"draft\" = 'f'  ORDER BY \"posts\".\"published_at\" DESC"
+      expect(Post.published_descending_order.to_sql).to eq "SELECT \"posts\".* FROM \"posts\"  WHERE \"posts\".\"draft\" = 'f'  ORDER BY \"posts\".\"published_at\" DESC"
       expect(Post.draft.to_sql).to eq "SELECT \"posts\".* FROM \"posts\"  WHERE \"posts\".\"draft\" = 't'  ORDER BY \"posts\".\"created_at\" DESC"
     end
   end
 
   # this is an example for how to test scopes using the database. See convo here: https://github.com/rubycorns/rorganize.it/pull/341
-  describe '.published' do
-    subject { described_class.published }
+  describe '.published_descending_order' do
+    subject { described_class.published_descending_order }
 
     it 'includes only published posts' do
       published = create(:post, draft: false)

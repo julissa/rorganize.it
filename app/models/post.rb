@@ -16,8 +16,11 @@
 
 class Post < ActiveRecord::Base
 
-  scope :published, -> { where(draft: false).order(published_at: :desc)}
+  scope :published_descending_order, -> { where(draft: false).order(published_at: :desc) }
+  scope :published_ascending_order, -> { where(draft: false).order(published_at: :asc) }
   scope :draft, -> { where(draft: true).order(created_at: :desc) }
+  scope :older, -> (date){ where("published_at < ?", date) }
+  scope :newer, -> (date){ where("published_at > ?", date) }
 
   validates :title, presence: true
   validates :description, presence: true
@@ -34,10 +37,10 @@ class Post < ActiveRecord::Base
   end
 
   def older_post
-    Post.published.where("published_at < ?", published_at).order(published_at: :desc).first
+    Post.published_descending_order.older(published_at).first
   end
 
   def newer_post
-    Post.published.where("published_at > ?", published_at).order(published_at: :asc).first
+    Post.published_ascending_order.newer(published_at).last
   end
 end
