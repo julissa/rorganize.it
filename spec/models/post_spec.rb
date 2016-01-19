@@ -59,8 +59,8 @@ describe Post do
 
     it 'includes published posts from newest to oldest' do
       post2 = create(:post, draft: true, slug: 'post-2')
-      post3 = create(:post, draft: false, published_at: '2015-03-01', slug: 'post-3')
-      post4 = create(:post, draft: false, published_at: '2015-05-01', slug: 'post-4')
+      post3 = create(:post, draft: false, published_at: '2015-03-01', slug: 'post-catsarecool')
+      post4 = create(:post, draft: false, published_at: '2015-05-01', slug: 'post-dogsaredope')
 
       expect(subject.first).to eql(post4)
       expect(subject).to contain_exactly(post3, post4)
