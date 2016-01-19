@@ -24,8 +24,8 @@ FactoryGirl.define do
   end
 
   factory :post do
-    title 'A blogpost'
+    title :title
     description 'about stuff'
-    slug 'a-blogpost'
+    slug :slug
   end
 end
