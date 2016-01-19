@@ -18,14 +18,6 @@ require 'spec_helper'
 
 describe Post do
 
-  # this is an example for how to test scopes using sql. See convo here: https://github.com/rubycorns/rorganize.it/pull/341
-  describe 'scopes' do
-    specify do
-      expect(Post.published_descending_order.to_sql).to eq "SELECT \"posts\".* FROM \"posts\"  WHERE \"posts\".\"draft\" = 'f'  ORDER BY \"posts\".\"published_at\" DESC"
-      expect(Post.draft.to_sql).to eq "SELECT \"posts\".* FROM \"posts\"  WHERE \"posts\".\"draft\" = 't'  ORDER BY \"posts\".\"created_at\" DESC"
-    end
-  end
-
   # this is an example for how to test scopes using the database. See convo here: https://github.com/rubycorns/rorganize.it/pull/341
   describe '.published_descending_order' do
     subject { described_class.published_descending_order }
@@ -61,6 +53,20 @@ describe Post do
       expect(subject).to contain_exactly(draft)
     end
   end
+
+  describe '.published_descending_order' do
+    subject { described_class.published_descending_order }
+
+    it 'includes published posts from newest to oldest' do
+      post2 = create(:post, draft: true, slug: 'post-2')
+      post3 = create(:post, draft: false, published_at: '2015-03-01', slug: 'post-3')
+      post4 = create(:post, draft: false, published_at: '2015-05-01', slug: 'post-4')
+
+      expect(subject.first).to eql(post4)
+      expect(subject).to contain_exactly(post3, post4)
+    end
+  end
+
 
   it { is_expected.to belong_to(:person) }
   it { is_expected.to validate_presence_of(:title) }
